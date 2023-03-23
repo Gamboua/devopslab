@@ -36,6 +36,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      - name: Generate build status
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const fs = require('fs');
+            fs.writeFileSync(
+              'build-status.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20"><rect x="0" y="0" width="100" height="20" fill="#${{ job.status == 'success' ? '2cbe4e' : 'e74c3c' }}"/><text x="50" y="14" font-size="11" fill="#fff" text-anchor="middle">${{ job.status }}</text></svg>`);
+
   Deploy:
     needs: Build
     runs-on: ubuntu-latest
