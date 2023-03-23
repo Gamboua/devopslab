@@ -20,10 +20,15 @@ jobs:
           python-version: '3.11.2'
 
       - name: Install Requirements
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install coverage
 
-      - name: Unit Test
-        run: python -m unittest -v test
+      - name: Unit Test and Coverage
+        run: |
+          coverage run --source=app -m pytest test.py
+          coverage report -m
+          coverage xml -i
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
